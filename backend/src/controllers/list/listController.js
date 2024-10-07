@@ -22,7 +22,7 @@ const listController = {
         const dayOfWeek = date.getUTCDay();
 
         // Mapear o dia da semana para uma string
-        const daysOfWeek = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        const daysOfWeek = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
         const dayOfWeekString = daysOfWeek[dayOfWeek];
 
         return {
@@ -37,7 +37,7 @@ const listController = {
       })
 
       const savedLists = await ListModel.insertMany(entriesFormatted);
-      res.status(201).json(savedLists);
+      res.status(201).json({ message: 'List created' });
     } catch (error) {
       res.status(500).send(error.message);
     }
@@ -56,9 +56,9 @@ const listController = {
   },
 
   //todo: find list
-  findAll: async (req, res) => {
+  find: async (req, res) => {
     try {
-      const { helper, day, month, departureTime, day_of_the_week, driver } = req.query;
+      const { helper, day, month, year, departureTime, day_of_the_week, driver } = req.query;
       let query = {};
 
       if (helper) {
@@ -71,6 +71,10 @@ const listController = {
 
       if (month) {
         query.month = month;
+      }
+
+      if (year) {
+        query.year = year;
       }
 
       if (departureTime) {
@@ -106,7 +110,7 @@ const listController = {
         return res.status(404).send('Lista não encontrada');
       }
 
-      res.status(200).json(updatedList);
+      res.status(200).json({ message: 'List updated' });
     } catch (error) {
       res.status(500).send(error.message);
     }
